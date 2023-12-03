@@ -107,14 +107,12 @@ public class inscription extends HttpServlet {
             medecin_dao.ajouter(medecin);
         	
         }
-
+        
         if (id_utilisateur!=-1) {
-            // Rediriger vers une page de succès
-            response.sendRedirect("inscription-success.jsp");
-        } else {
-            // Rediriger vers une page d'échec
-            response.sendRedirect("inscription-failure.jsp");
-        }
+        	request.getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
+        } 
+
+       
     }
 
 }
