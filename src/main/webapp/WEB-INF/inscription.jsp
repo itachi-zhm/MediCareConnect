@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,25 +12,25 @@
 
 <form action="inscription" method="post">
     Nom: <input type="text" name="nom" required><br>
-    PrÃ©nom: <input type="text" name="prenom" required><br>
+    Prénom: <input type="text" name="prenom" required><br>
     Email: <input type="email" name="email" required><br>
     Mot de passe: <input type="password" name="password" required><br>
-    NumÃ©ro de tÃ©lÃ©phone: <input type="text" name="numTel" required><br>
+    Numéro de téléphone: <input type="text" name="numTel" required><br>
    <label for="sexe">Sexe :</label>
     <input type="radio" id="masculin" name="sexe" value="M" checked>
     <label for="masculin">Masculin</label>
     <input type="radio" id="feminin" name="sexe" value="F">
-    <label for="feminin">FÃ©minin</label><br>
+    <label for="feminin">Féminin</label><br>
     Type: <select name="type" id="type" onchange="afficherChampsSpecifiques()">
         <option value="patient" selected>Patient</option>
-        <option value="medecin">MÃ©decin</option>
+        <option value="medecin">Médecin</option>
     </select><br>
     <div id="champsMedecin" style="display: none;">
-        SpÃ©cialitÃ©: <input type="text" name="specialite"><br>
+        Spécialité: <input type="text" name="specialite"><br>
         Adresse: <input type="text" name="adresse" ><br>
     </div>
 
-    <!-- Champs spÃ©cifiques pour le type "Patient" -->
+    <!-- Champs spécifiques pour le type "Patient" -->
     <div id="champsPatient" style="display: none;">
         Contact d'urgence: <input type="text" name="contact_urgence"><br>
     </div>
@@ -38,16 +38,16 @@
 
     <script>
         function afficherChampsSpecifiques() {
-            console.log("Fonction appelÃ©e");
+            console.log("Fonction appelée");
             var typeSelectionne = document.getElementById("type");
             var champsMedecin = document.getElementById("champsMedecin");
             var champsPatient = document.getElementById("champsPatient");
 
-            // Masquer tous les champs spÃ©cifiques
+            // Masquer tous les champs spécifiques
             champsMedecin.style.display = "none";
             champsPatient.style.display = "none";
 
-            // Afficher les champs spÃ©cifiques en fonction du type sÃ©lectionnÃ©
+            // Afficher les champs spécifiques en fonction du type sélectionné
             if (typeSelectionne.value === "medecin") {
                 champsMedecin.style.display = "block";
             } else if (typeSelectionne.value === "patient") {
