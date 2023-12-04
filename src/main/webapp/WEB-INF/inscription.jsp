@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,6 +35,10 @@
     <div id="champsPatient" style="display: none;">
         Contact d'urgence: <input type="text" name="contact_urgence"><br>
     </div>
+    <%-- Afficher le message d'erreur s'il y en a un --%>
+        <c:if test="${not empty requestScope.erreurMessage}">
+            <p style="color: red;">${requestScope.erreurMessage}</p>
+        </c:if>
     <input type="submit" value="S'inscrire">
 
     <script>

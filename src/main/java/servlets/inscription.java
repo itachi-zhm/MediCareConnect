@@ -110,7 +110,14 @@ public class inscription extends HttpServlet {
         
         if (id_utilisateur!=-1) {
         	request.getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
-        } 
+        }
+        else {
+        	// Définir un attribut de la requête avec le message d'erreur
+            request.setAttribute("erreurMessage", "L'inscription a échoué. Veuillez réessayer.");
+            // Rediriger vers la même page d'inscription
+            request.getRequestDispatcher("/WEB-INF/inscription.jsp").forward(request, response);
+            return; // Arrêter le traitement de la servlet
+        }
 
        
     }
