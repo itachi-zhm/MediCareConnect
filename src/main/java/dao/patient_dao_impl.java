@@ -51,5 +51,78 @@ public class patient_dao_impl implements patient_dao {
 	    
 		return false;
 	}
+	@Override
+	public void modifierPatient(patient patient) {
+		// TODO Auto-generated method stub
+		Connection connexion = null;
+	    PreparedStatement preparedStatementPatients = null;
+	    PreparedStatement preparedStatementUtilisateurs = null;
+
+	    try {
+	        connexion = dao_factory.getConnection();
+	        connexion.setAutoCommit(false);
+
+	        // Mise à jour de la table medecins
+	        preparedStatementPatients = connexion.prepareStatement("UPDATE patients SET contact_urgence = ? WHERE id_utilisateur = ?");
+	        preparedStatementPatients.setString(1, patient.getContact_urgence());
+	        preparedStatementPatients.setInt(2, patient.getId_utilisateur());
+	        preparedStatementPatients.executeUpdate();
+	        
+	        // Mise à jour de la table utilisateurs
+	        preparedStatementUtilisateurs = connexion.prepareStatement("UPDATE utilisateurs SET nom = ?, prenom = ?, email = ?, num_tel = ? WHERE id_utilisateur = ?");
+	        preparedStatementUtilisateurs.setString(1, patient.getNom());
+	        preparedStatementUtilisateurs.setString(2, patient.getPrenom());
+	        preparedStatementUtilisateurs.setString(3, patient.getEmail());
+	        preparedStatementUtilisateurs.setString(4, patient.getNum_tel());
+	        preparedStatementUtilisateurs.setInt(5, patient.getId_utilisateur());
+	        preparedStatementUtilisateurs.executeUpdate();
+
+	        // Commit de la transaction
+	        connexion.commit();
+	    } catch (SQLException e) {
+	        // En cas d'erreur, rollback la transaction
+	        if (connexion != null) {
+	            try {
+	                connexion.rollback();
+	            } catch (SQLException ex) {
+	                ex.printStackTrace();
+	            }
+	        }
+	        e.printStackTrace(); // Gérer l'exception de manière appropriée
+	    } finally {
+	        // Fermeture des ressources
+	        try {
+	            if (preparedStatementPatients != null) {
+	            	preparedStatementPatients.close();
+	            }
+	            if (preparedStatementUtilisateurs != null) {
+	                preparedStatementUtilisateurs.close();
+	            }
+	            if (connexion != null) {
+	                connexion.setAutoCommit(true);
+	                connexion.close();
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+		
+	}
+	@Override
+	public void supprimerPatient(int id_patient) {
+		// TODO Auto-generated method stub
+		Connection connexion = null;
+		PreparedStatement preparedStatement = null;
+		
+		try {
+			connexion = dao_factory.getConnection();
+	        preparedStatement = connexion.prepareStatement("DELETE FROM utilisateurs WHERE id_utilisateur = ?");
+	        preparedStatement.setInt(1, id_patient);
+	        preparedStatement.executeUpdate();
+	        } catch (SQLException e) {
+	            e.printStackTrace(); // Gérer l'exception de manière appropriée
+	        }
+		
+	}
 
 }

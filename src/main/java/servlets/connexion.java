@@ -58,13 +58,14 @@ public class connexion extends HttpServlet {
         if (user != null) {
             // Créer une session et stocker l'utilisateur connecté
             HttpSession session = request.getSession();
-            session.setAttribute("utilisateurConnecte", user);
+            session.setAttribute("utilisateur", user);
 
             // Rediriger vers la page d'accueil (ou autre page après connexion réussie)
-            response.sendRedirect("accueil.jsp");
+            request.getRequestDispatcher("/WEB-INF/accueil.jsp").forward(request, response);
         } else {
-            // Rediriger vers une page d'échec de connexion
-            response.sendRedirect("connexion_failure.jsp");
+            // Afficher un message d'erreur si la connexion échoue
+            request.setAttribute("erreurMessage", "Adresse e-mail ou mot de passe incorrect");
+            request.getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
         }
     }
 }

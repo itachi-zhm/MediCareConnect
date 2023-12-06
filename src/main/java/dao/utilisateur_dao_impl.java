@@ -1,6 +1,9 @@
 package dao;
 
 import beans.utilisateur;
+import beans.patient;
+import beans.medecin;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +21,7 @@ public class utilisateur_dao_impl implements utilisateur_dao{
         this.medecin_dao = new medecin_dao_impl(dao_factory);
     }
 	
-	// Fonction pour hacher un mot de passe
+	//----------------------Fonction pour hacher un mot de passe
     private String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -37,6 +40,7 @@ public class utilisateur_dao_impl implements utilisateur_dao{
         }
     }
 
+    //-------------------------fonction d'inscription des nouveaux utilisateurs 
 	@Override
 	public int inscription(utilisateur utilisateur, String typeUtilisateur) {
 		// TODO Auto-generated method stub
@@ -72,7 +76,7 @@ public class utilisateur_dao_impl implements utilisateur_dao{
 	}
 	
 	
-	//-------------la fonction de connexion
+	//-------------------------------------la fonction de connexion
 	public utilisateur connexion(String email, String password) {
 	    Connection connexion = null;
 	    PreparedStatement preparedStatement = null;
@@ -88,26 +92,64 @@ public class utilisateur_dao_impl implements utilisateur_dao{
 	        preparedStatement.setString(2, hashPassword(password)); // Hacher le mot de passe pour la comparaison
 
 	        resultSet = preparedStatement.executeQuery();
-
+	        
 	        if (resultSet.next()) {
-	            // Si le résultat contient une ligne, construire un objet utilisateur
-	            utilisateur user = new utilisateur();
-	            user.setId_utilistaeur(resultSet.getInt("id_utilisateur"));
-	            user.setNom(resultSet.getString("nom"));
-	            user.setPrenom(resultSet.getString("prenom"));
-	            user.setEmail(resultSet.getString("email"));
-	            user.setPassword(resultSet.getString("password"));
-	            user.setType(resultSet.getString("type")); // Assurez-vous que le type est correct
-	            user.setNum_tel(resultSet.getString("num_tel"));
+	        	if("patient".equals(resultSet.getString("type"))) {
+	        		patient user = new patient();
+	        		user.setId_utilistaeur(resultSet.getInt("id_utilisateur"));
+		            user.setNom(resultSet.getString("nom"));
+		            user.setPrenom(resultSet.getString("prenom"));
+		            user.setEmail(resultSet.getString("email"));
+		            user.setPassword(resultSet.getString("password"));
+		            user.setSexe(resultSet.getString("sexe"));
+		            user.setType(resultSet.getString("type")); 
+		            user.setNum_tel(resultSet.getString("num_tel"));
+		            String patientQuery = "SELECT * FROM patients WHERE id_utilisateur = ?";
+	                try (PreparedStatement patientStatement = connexion.prepareStatement(patientQuery)) {
+	                    patientStatement.setInt(1, user.getId_utiliseur());
+	                    ResultSet patientResultSet = patientStatement.executeQuery();
+	                    if (patientResultSet.next()) {
+	                        String contactUrgence = patientResultSet.getString("contact_urgence");
+	                        user.setContact_urgence(contactUrgence);
+	                        user.setId_utilisateur(user.getId_utiliseur());
+	                        //System.out.println(user.toString());
+	                        return user;
+	                    }
+	                }
+	        		
+	        	}
+	        	else if("medecin".equals(resultSet.getString("type")))
+	        	{
+	        		medecin user = new medecin();
+	        		user.setId_utilistaeur(resultSet.getInt("id_utilisateur"));
+		            user.setNom(resultSet.getString("nom"));
+		            user.setPrenom(resultSet.getString("prenom"));
+		            user.setEmail(resultSet.getString("email"));
+		            user.setPassword(resultSet.getString("password"));
+		            user.setSexe(resultSet.getString("sexe"));
+		            user.setType(resultSet.getString("type")); 
+		            user.setNum_tel(resultSet.getString("num_tel"));
+	        		String medecinQuery = "SELECT * FROM medecins WHERE id_utilisateur = ?";
+	                try (PreparedStatement medecinStatement = connexion.prepareStatement(medecinQuery)) {
+	                    medecinStatement.setInt(1, user.getId_utiliseur());
+	                    ResultSet medecinResultSet = medecinStatement.executeQuery();
 
-	            return user;
+	                    if (medecinResultSet.next()) {
+	                        String specialite = medecinResultSet.getString("specialite");
+	                        String adresse = medecinResultSet.getString("adresse");
+	                        user.setId_utilisateur(user.getId_utiliseur());
+	                        user.setSpecialite(specialite);
+	                        user.setAdresse(adresse);
+	                        //System.out.println(user.toString());
+	                        return user;
+	                    }
+	                }
+	        	}
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    } finally {
-	        // Fermer les ressources dans le bloc finally si nécessaire
-	        // (try-with-resources est une meilleure option si vous utilisez Java 7+)
-	        // ...
+	        
 	    }
 
 	    return null;

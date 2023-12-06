@@ -7,6 +7,15 @@ enum Specialite {
     
 }
 public class medecin extends utilisateur {
+	@Override
+	public String toString() {
+		return "medecin [id_medecin=" + id_medecin + ", specialite=" + specialite + ", adresse=" + adresse
+				+ ", id_utilisateur=" + id_utilisateur + ", getSexe()=" + getSexe() + ", getType()=" + getType()
+				+ ", getId_utiliseur()=" + getId_utiliseur() + ", getNom()=" + getNom() + ", getPrenom()=" + getPrenom()
+				+ ", getEmail()=" + getEmail() + ", getPassword()=" + getPassword() + ", getNum_tel()=" + getNum_tel()
+				+ "]";
+	}
+
 	private int id_medecin;
 	private String specialite;
 	private String adresse;
