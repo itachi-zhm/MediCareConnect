@@ -132,7 +132,7 @@ public class patient_dao_impl implements patient_dao {
 		
 	}
 	@Override
-	public void supprimerPatient(int id_patient) {
+	/*public void supprimerPatient(int id_patient) {
 		// TODO Auto-generated method stub
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
@@ -147,6 +147,47 @@ public class patient_dao_impl implements patient_dao {
 	        }
 		
 	}
+	*/
+	public void supprimerPatient(int id_utilisateur) {
+    Connection connexion = null;
+    PreparedStatement preparedStatement = null;
+
+    try {
+        connexion = dao_factory.getConnection();
+
+        // Supprimer d'abord les enregistrements dans la table `dossier_medicale`
+        preparedStatement = connexion.prepareStatement("DELETE FROM dossier_medicale WHERE id_patient IN (SELECT id_patient FROM patients WHERE id_utilisateur = ?)");
+        preparedStatement.setInt(1, id_utilisateur);
+        preparedStatement.executeUpdate();
+
+        // Ensuite, supprimer les enregistrements dans la table `patients`
+        preparedStatement = connexion.prepareStatement("DELETE FROM patients WHERE id_utilisateur = ?");
+        preparedStatement.setInt(1, id_utilisateur);
+        preparedStatement.executeUpdate();
+
+        // Enfin, supprimer l'utilisateur dans la table `utilisateurs`
+        preparedStatement = connexion.prepareStatement("DELETE FROM utilisateurs WHERE id_utilisateur = ?");
+        preparedStatement.setInt(1, id_utilisateur);
+        preparedStatement.executeUpdate();
+
+    } catch (SQLException e) {
+        e.printStackTrace(); // Gérer l'exception de manière appropriée
+    } finally {
+        // Fermer les ressources (connexion, preparedStatement, etc.) dans le bloc "finally"
+        try {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connexion != null) {
+                connexion.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
 	@Override
 	public void ajouterDossierMedical(int id_patient, int id_dm) {
 	    Connection connexion = null;
