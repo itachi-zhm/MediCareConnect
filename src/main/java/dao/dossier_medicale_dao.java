@@ -2,6 +2,6 @@ package dao;
 
 public interface dossier_medicale_dao {
 	
-	public boolean ajouter();
+	public int ajouter(int id_patient);
 
 }

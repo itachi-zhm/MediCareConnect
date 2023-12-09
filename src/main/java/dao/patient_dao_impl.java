@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import beans.patient;
@@ -14,21 +15,43 @@ public class patient_dao_impl implements patient_dao {
         this.dao_factory = dao_factory;
     }
 	@Override
-	public boolean ajouter(patient patient) {
+	public int ajouter(patient patient) {
 		// TODO Auto-generated method stub
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		
 		String query_patient = "INSERT INTO patients (id_utilisateur, contact_urgence) VALUES (?, ?)";
 		try {
             connexion = dao_factory.getConnection();
-            preparedStatement = connexion.prepareStatement(query_patient);
+            preparedStatement = connexion.prepareStatement(query_patient,PreparedStatement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setInt(1, patient.getId_utilisateur());
             preparedStatement.setString(2, patient.getContact_urgence());
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return rowsAffected > 0;
+            //return rowsAffected > 0;
+            
+            if (rowsAffected == 0) {
+                throw new SQLException("Échec de la création du dossier médical. Aucune ligne affectée.");
+            }
+
+            // Récupérer l'ID généré pour le dossier médical
+            resultSet = preparedStatement.getGeneratedKeys();
+            
+            
+            
+            if (resultSet.next()) {
+            	System.out.println("////////////////////////////////"+resultSet.getInt(1));
+                return resultSet.getInt(1);
+            } else {
+                throw new SQLException("Échec de la récupération de l'ID du dossier médical généré.");
+            }
+            
+            
+            
+            
+            
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -49,7 +72,7 @@ public class patient_dao_impl implements patient_dao {
         }
 		
 	    
-		return false;
+		return -1;
 	}
 	@Override
 	public void modifierPatient(patient patient) {
@@ -124,5 +147,51 @@ public class patient_dao_impl implements patient_dao {
 	        }
 		
 	}
+	@Override
+	public void ajouterDossierMedical(int id_patient, int id_dm) {
+	    Connection connexion = null;
+	    PreparedStatement preparedStatement = null;
+
+	    try {
+	        connexion = dao_factory.getConnection();
+	        
+
+	        // Mise à jour de la table patients
+	        preparedStatement = connexion.prepareStatement("UPDATE patients SET id_dossier_medicale = ? WHERE id_patient = ?");
+	        preparedStatement.setInt(1, id_dm);
+	        preparedStatement.setInt(2, id_patient);
+	        preparedStatement.executeUpdate();
+
+	        // Validation de la transaction
+	        
+	    } catch (SQLException e) {
+	        // En cas d'erreur, rollback la transaction
+	        if (connexion != null) {
+	            try {
+	                connexion.rollback();
+	            } catch (SQLException ex) {
+	                ex.printStackTrace();
+	            }
+	        }
+	        e.printStackTrace(); // Gérer l'exception de manière appropriée
+	    } finally {
+	        // Fermeture des ressources
+	        if (preparedStatement != null) {
+	            try {
+	                preparedStatement.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	        if (connexion != null) {
+	            try {
+	                connexion.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	}
+
 
 }

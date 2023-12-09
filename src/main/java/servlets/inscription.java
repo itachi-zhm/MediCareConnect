@@ -10,6 +10,7 @@ import dao.dao_factory;
 import dao.utilisateur_dao;
 import dao.medecin_dao;
 import dao.patient_dao;
+import dao.dossier_medicale_dao;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -91,7 +92,12 @@ public class inscription extends HttpServlet {
         	
         	
         	patient_dao patient_dao = daoFactory.get_patient_dao();
-        	patient_dao.ajouter(patient);
+        	int id = patient_dao.ajouter(patient);
+        	dossier_medicale_dao dm_dao = daoFactory.get_dossier_medicale_dao();
+        	int id_dm = dm_dao.ajouter(id);
+        	patient_dao.ajouterDossierMedical(id, id_dm);
+        	System.out.println("++++++++++"+id_dm+"++++++++++++"+id);
+        	
   
         }
         else if("medecin".equalsIgnoreCase(type)&& id_utilisateur!=-1) {
