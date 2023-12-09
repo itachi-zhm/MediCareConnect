@@ -96,7 +96,6 @@ public class inscription extends HttpServlet {
         	dossier_medicale_dao dm_dao = daoFactory.get_dossier_medicale_dao();
         	int id_dm = dm_dao.ajouter(id);
         	patient_dao.ajouterDossierMedical(id, id_dm);
-        	System.out.println("++++++++++"+id_dm+"++++++++++++"+id);
         	
   
         }
