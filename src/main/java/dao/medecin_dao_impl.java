@@ -2,7 +2,10 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import beans.medecin;
 
@@ -128,6 +131,72 @@ public class medecin_dao_impl implements medecin_dao{
 	            e.printStackTrace(); // Gérer l'exception de manière appropriée
 	        }
 	 }
+	
+	
+
+	@Override
+	public List<medecin> listerMedecins() {
+	    List<medecin> listeMedecins = new ArrayList<>();
+	    Connection connexion = null;
+	    PreparedStatement preparedStatementMedecin = null;
+	    ResultSet resultSetMedecin = null;
+	    PreparedStatement preparedStatementUtilisateur = null;
+	    ResultSet resultSetUtilisateur = null;
+
+	    try {
+	        connexion = dao_factory.getConnection();
+	        //--------récupérer les informations depuis la table medecin
+	        String query_medecin = "SELECT * FROM medecins";
+	        preparedStatementMedecin = connexion.prepareStatement(query_medecin);
+	        resultSetMedecin = preparedStatementMedecin.executeQuery();
+
+	        while (resultSetMedecin.next()) {
+	            // Créer un objet Medecin pour chaque ligne de résultat
+	            medecin medecin = new medecin();
+	            medecin.setId_medecin(resultSetMedecin.getInt("id_med"));
+	            medecin.setId_utilisateur(resultSetMedecin.getInt("id_utilisateur"));
+	            medecin.setSpecialite(resultSetMedecin.getString("specialite"));
+	            medecin.setAdresse(resultSetMedecin.getString("adresse"));
+
+	            //--------récupérer les informations depuis la table utilisateur
+	            String query_utilisateur = "SELECT * FROM utilisateurs WHERE id_utilisateur = ?";
+	            preparedStatementUtilisateur = connexion.prepareStatement(query_utilisateur);
+	            preparedStatementUtilisateur.setInt(1, medecin.getId_utilisateur());
+	            resultSetUtilisateur = preparedStatementUtilisateur.executeQuery();
+	            
+	            if (resultSetUtilisateur.next()) {
+	                medecin.setNom(resultSetUtilisateur.getString("nom"));
+	                medecin.setPrenom(resultSetUtilisateur.getString("prenom"));
+	                medecin.setEmail(resultSetUtilisateur.getString("email"));
+	                medecin.setSexe(resultSetUtilisateur.getString("sexe"));
+	                medecin.setNum_tel(resultSetUtilisateur.getString("num_tel"));
+	            }
+
+	            System.out.println(medecin.toString());
+	            // Ajouter le médecin à la liste
+	            listeMedecins.add(medecin);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Fermer les ressources dans le bloc finally
+	        try {
+	            if (resultSetMedecin != null) resultSetMedecin.close();
+	            if (preparedStatementMedecin != null) preparedStatementMedecin.close();
+	            if (resultSetUtilisateur != null) resultSetUtilisateur.close();
+	            if (preparedStatementUtilisateur != null) preparedStatementUtilisateur.close();
+	            if (connexion != null) connexion.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return listeMedecins;
+	}
+
+
 		
 
+	
+	
 }
