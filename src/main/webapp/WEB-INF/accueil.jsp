@@ -35,5 +35,11 @@
    
 </c:if>
 	<a href="/MediCareConnect/gestion_utilisateur">Gérer utilisateur</a>
+	<form action="gestion_utilisateur" method="get">
+		<input type="submit" value="gérer profile">
+	</form>
+	<form action="fixer_rdv" method="get">
+		<input type="submit" value="fixer rendez-vous">
+	</form>
 </body>
 </html>

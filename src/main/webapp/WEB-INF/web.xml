@@ -59,4 +59,14 @@
     <servlet-name>listeMedecins</servlet-name>
     <url-pattern>/listeMedecins</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>fixer_rdv</display-name>
+    <servlet-name>fixer_rdv</servlet-name>
+    <servlet-class>servlets.fixer_rdv</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>fixer_rdv</servlet-name>
+    <url-pattern>/fixer_rdv</url-pattern>
+  </servlet-mapping>
 </web-app>

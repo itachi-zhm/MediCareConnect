@@ -172,7 +172,6 @@ public class medecin_dao_impl implements medecin_dao{
 	                medecin.setNum_tel(resultSetUtilisateur.getString("num_tel"));
 	            }
 
-	            System.out.println(medecin.toString());
 	            // Ajouter le médecin à la liste
 	            listeMedecins.add(medecin);
 	        }

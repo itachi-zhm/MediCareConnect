@@ -31,6 +31,11 @@
                     <td>${medecin.email}</td>
                     <td>${medecin.specialite}</td>
                     <td>${medecin.adresse}</td>
+                    <td>
+                    	<form action="" method="get">
+                    		<input type="submit" value="fixer rdv">
+                    	</form>
+                    </td>
                 </tr>
             </c:forEach>
         </tbody>
