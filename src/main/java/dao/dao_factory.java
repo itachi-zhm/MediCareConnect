@@ -47,4 +47,8 @@ public class dao_factory {
     public dossier_medicale_dao get_dossier_medicale_dao() {
         return new dossier_medicale_dao_impl(this);
     }
+    
+    public rdv_dao get_rdv_dao() {
+    	return new rdv_dao_impl(this);
+    }
 }

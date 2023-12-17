@@ -14,6 +14,29 @@ public class patient_dao_impl implements patient_dao {
     public patient_dao_impl(dao_factory dao_factory) {
         this.dao_factory = dao_factory;
     }
+    
+    public int  get_id_patient(int id_utilisateur)
+    {
+    	int id_patient=-1;
+    	Connection connexion = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
+	        connexion = dao_factory.getConnection();
+	        
+	        String query = "SELECT id_patient FROM patients where id_utilisateur = ?";
+	        preparedStatement = connexion.prepareStatement(query);
+	        preparedStatement.setInt(1, id_utilisateur);
+	        resultSet = preparedStatement.executeQuery();
+	        if(resultSet.next())
+	        	id_patient = resultSet.getInt("id_patient");
+		} catch (SQLException e) {
+	        e.printStackTrace();
+		}
+		
+    	return id_patient;
+    	
+    }
 	@Override
 	public int ajouter(patient patient) {
 		// TODO Auto-generated method stub

@@ -16,8 +16,9 @@
 </head>
 <body>
     <h1>Fixer un rendez-vous avec le médecin</h1>
+    <c:if test="${sessionScope.utilisateur ne null}">
 
-    <form action="FixerRendezVousServlet" method="post">
+    <form action="fixer_rdv" method="post">
     
     	<div class="doctor-list">
         <table border="0">
@@ -41,28 +42,29 @@
                     <td>${medecin.specialite}</td>
                     <td>${medecin.adresse}</td>
                     <td>
-                    	<input type="checkbox" name="choix_med">
+                    	<input type="radio" name="choix_med" value="${medecin.id_medecin}">
                     </td>
                 </tr>
             </c:forEach>
         </tbody>
     </table>
     	</div>
-    
+    	<input type="hidden" name="id" value="${sessionScope.utilisateur.id_utilisateur}">
         <label for="startDate">Date de début de disponibilité :</label>
-        <input type="date" id="startDate" name="startDate" required><br>
+        <input type="date" id="date_debut" name="date_debut" required><br>
 
         <label for="endDate">Date de fin de disponibilité :</label>
-        <input type="date" id="endDate" name="endDate" required onchange="setMinMaxDate()"><br>
+        <input type="date" id="date_fin" name="date_fin" required onchange="setMinMaxDate()"><br>
 
         <label for="startTime">Heure de début de disponibilité :</label>
-        <input type="time" id="startTime" name="startTime" required><br>
+        <input type="time" id="heure_debut" name="heure_debut" required><br>
 
         <label for="endTime">Heure de fin de disponibilité :</label>
-        <input type="time" id="endTime" name="endTime" required onchange="setMinMaxTime()"><br>
+        <input type="time" id="heure_fin" name="heure_fin" required onchange="setMinMaxTime()"><br>
 
 
         <input type="submit" value="Fixer le rendez-vous">
     </form>
+    </c:if>
 </body>
 </html>
