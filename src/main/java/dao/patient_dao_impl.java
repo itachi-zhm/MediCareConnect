@@ -65,7 +65,6 @@ public class patient_dao_impl implements patient_dao {
             
             
             if (resultSet.next()) {
-            	System.out.println("////////////////////////////////"+resultSet.getInt(1));
                 return resultSet.getInt(1);
             } else {
                 throw new SQLException("Échec de la récupération de l'ID du dossier médical généré.");

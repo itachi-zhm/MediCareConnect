@@ -9,5 +9,6 @@ public interface medecin_dao {
 	public void modifierMedecin(medecin medecin);
 	public void supprimerMedecin(int id_medecin);
 	public List<medecin> listerMedecins();
+	public int get_id_medecin(int id_utilisateur);
 
 }

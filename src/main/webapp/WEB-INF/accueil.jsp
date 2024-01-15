@@ -38,8 +38,16 @@
 	<form action="gestion_utilisateur" method="get">
 		<input type="submit" value="gérer profile">
 	</form>
-	<form action="fixer_rdv" method="get">
-		<input type="submit" value="fixer rendez-vous">
-	</form>
+	<c:if test="${sessionScope.utilisateur.type eq 'patient'}">
+		<form action="fixer_rdv" method="get">
+			<input type="submit" value="fixer rendez-vous">
+		</form>
+	</c:if>
+	<c:if test="${sessionScope.utilisateur.type eq 'medecin'}">
+		<form action="rdvs" method="get">
+			 <input type="hidden" name="id" value="${sessionScope.utilisateur.id_utilisateur}">
+			<input type="submit" value="consulter rendez-vous">
+		</form>
+	</c:if>
 </body>
 </html>

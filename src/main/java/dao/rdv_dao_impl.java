@@ -2,7 +2,10 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import beans.rdv;
 
@@ -38,5 +41,46 @@ public class rdv_dao_impl implements rdv_dao{
             e.printStackTrace(); // Gérer l'exception de manière appropriée dans votre application
         }
 	}
+	
+	
+	
+	
+	public List<rdv> getRdvMedecin(int id_medecin) {
+	    List<rdv> rendezVous = new ArrayList<>();
+	    Connection connexion = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+
+	    try {
+	        connexion = dao_factory.getConnection();
+	        
+	        String query = "SELECT * FROM rendez_vous WHERE id_med = ?";
+	        preparedStatement = connexion.prepareStatement(query);
+	        preparedStatement.setInt(1, id_medecin);
+	        resultSet = preparedStatement.executeQuery();
+	        while (resultSet.next()) {
+	            rdv rdv = new rdv();
+	            rdv.setId_rdv(resultSet.getInt("id_rdv"));
+	            rdv.setId_patient(resultSet.getInt("id_patient"));
+	            rdv.setId_med(id_medecin);
+	            rdv.setDate_debut(resultSet.getDate("date_debut"));
+	            rdv.setDate_fin(resultSet.getDate("date_fin"));
+	            rdv.setHeure_debut(resultSet.getString("heure_debut"));
+	            rdv.setHeure_fin(resultSet.getString("heure_fin"));
+	            rdv.setDate_rdv(resultSet.getDate("date_rdv"));
+	            rdv.setHeure(resultSet.getString("heure"));
+	            rdv.setRemarque(resultSet.getString("remarque"));
+	            rendezVous.add(rdv);
+	            rdv.toString();
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace(); 
+	    } finally {
+	    }
+
+	    return rendezVous;
+	}
+
 
 }

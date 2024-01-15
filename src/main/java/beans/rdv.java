@@ -6,7 +6,7 @@ import java.sql.Time;
 public class rdv {
 	private int id_rdv;     
 	private Date date_rdv;       
-	private Date heure;      
+	private String heure;      
 	private String remarque;   
 	private Date date_debut;
 	private Date date_fin;
@@ -28,10 +28,10 @@ public class rdv {
 	public void setDate_rdv(Date date_rdv) {
 		this.date_rdv = date_rdv;
 	}
-	public Date getHeure() {
+	public String getHeure() {
 		return heure;
 	}
-	public void setHeure(Date heure) {
+	public void setHeure(String heure) {
 		this.heure = heure;
 	}
 	public String getRemarque() {

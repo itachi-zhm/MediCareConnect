@@ -17,6 +17,28 @@ public class medecin_dao_impl implements medecin_dao{
         this.dao_factory = dao_factory;
     }
     
+    public int  get_id_medecin(int id_utilisateur)
+    {
+    	int id_medecin=-1;
+    	Connection connexion = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
+	        connexion = dao_factory.getConnection();
+	        String query = "SELECT id_med FROM medecins where id_utilisateur = ?";
+	        preparedStatement = connexion.prepareStatement(query);
+	        preparedStatement.setInt(1, id_utilisateur);
+	        resultSet = preparedStatement.executeQuery();
+	        if(resultSet.next())
+	        	id_medecin = resultSet.getInt("id_med");
+		} catch (SQLException e) {
+	        e.printStackTrace();
+		}
+		
+    	return id_medecin;
+    	
+    }
+    
     //--------------------la fonction qui permet d'ajouter un nouveau medecin à notre base de données
 	@Override
 	public boolean ajouter(medecin medecin) {
