@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -82,5 +83,26 @@ public class rdv_dao_impl implements rdv_dao{
 	    return rendezVous;
 	}
 
+	public void confirmer_rdv(int id_rdv, Date date_rdv, String heure)
+	{
+		Connection connexion = null;
+	    PreparedStatement preparedStatement = null;
+	    String query_rdv = "UPDATE rendez_vous SET date_rdv = ?, heure = ? where id_rdv = ?";
+	    try {
+	    connexion = dao_factory.getConnection();
+		preparedStatement = connexion.prepareStatement(query_rdv, PreparedStatement.RETURN_GENERATED_KEYS);
+		
+        preparedStatement.setDate(1, date_rdv);
+        preparedStatement.setString(2, heure);
+        preparedStatement.setInt(3, id_rdv);
+
+        // Exécution de la requête
+        preparedStatement.executeUpdate();
+	    }
+	    catch (SQLException e) {
+            e.printStackTrace(); // Gérer l'exception de manière appropriée dans votre application
+        }
+		
+	}
 
 }
